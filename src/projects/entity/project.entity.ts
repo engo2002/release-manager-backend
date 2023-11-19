@@ -26,7 +26,7 @@ export class Project {
     link: string;
 
     @OneToMany(() => Release, release => release.project)
-    @ApiProperty({ isArray: true, type: Release })
+    @ApiProperty({ isArray: true, type: () => Release })
     releases: Release[];
 
 }

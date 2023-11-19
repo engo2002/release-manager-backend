@@ -2,8 +2,9 @@ import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } fr
 import { Release } from './entity/release.entity';
 import { ReleaseField } from './entity/release-field.entity';
 import { CreateReleaseDto } from './dto/create-release.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import { ReleaseService } from './releases.service';
+import {Project} from "../projects/entity/project.entity";
 
 @ApiTags('releases')
 @Controller('releases')
@@ -11,11 +12,13 @@ export class ReleaseController {
     constructor(private readonly releaseService: ReleaseService) {}
 
     @Get()
+    @ApiResponse({ type: Release, isArray: true })
     async findAllReleases(): Promise<Release[]> {
         return this.releaseService.findAllReleases();
     }
 
     @Get(':id')
+    @ApiResponse({ type: Release })
     async findReleaseById(@Param('id') id: string): Promise<Release> {
         const release = await this.releaseService.findReleaseById(id);
         if (!release) {
@@ -25,11 +28,13 @@ export class ReleaseController {
     }
 
     @Post()
+    @ApiResponse({ type: Release })
     async createRelease(@Body() createReleaseDto: CreateReleaseDto): Promise<Release> {
         return this.releaseService.createReleaseWithFields(createReleaseDto);
     }
 
     @Put(':id/fields/:fieldType')
+    @ApiResponse({ type: Release })
     async addReleaseField(
         @Param('id') releaseId: string,
         @Param('fieldType') fieldType: string,
@@ -39,6 +44,7 @@ export class ReleaseController {
     }
 
     @Put(':id')
+    @ApiResponse({ type: Release })
     async updateRelease(
         @Param('id') id: string,
         @Body() releaseData: Partial<Release>,
@@ -51,6 +57,7 @@ export class ReleaseController {
     }
 
     @Delete(':id')
+    @ApiResponse({ type: Boolean })
     async deleteRelease(@Param('id') id: string): Promise<boolean> {
         const deleted = await this.releaseService.deleteRelease(id);
         if (!deleted) {

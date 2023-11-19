@@ -13,7 +13,7 @@ export class Release {
     @ApiProperty()
     releaseNumber: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => Project })
     @OneToOne(() => Project, project => project.releases)
     project: Project;
 

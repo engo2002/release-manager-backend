@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Project } from './entity/project.entity';
-import { ApiTags } from '@nestjs/swagger';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
@@ -11,11 +11,13 @@ export class ProjectsController {
     constructor(private readonly projectsService: ProjectsService) {}
 
     @Get()
+    @ApiResponse({ type: Project, isArray: true })
     async findAll(): Promise<Project[]> {
         return this.projectsService.findAll();
     }
 
     @Get(':id')
+    @ApiResponse({ type: Project })
     async findOne(@Param('id') id: string): Promise<Project> {
         const project = await this.projectsService.findOne(id);
         if (!project) {
@@ -25,11 +27,13 @@ export class ProjectsController {
     }
 
     @Post()
+    @ApiResponse({ type: Project })
     async create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
         return this.projectsService.create(createProjectDto);
     }
 
     @Put(':id')
+    @ApiResponse({ type: Project })
     async update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
         const updatedProject = await this.projectsService.update(id, updateProjectDto);
         if (!updatedProject) {
@@ -39,6 +43,7 @@ export class ProjectsController {
     }
 
     @Delete(':id')
+    @ApiResponse({ type: Boolean })
     async remove(@Param('id') id: string): Promise<boolean> {
         const deleted = await this.projectsService.remove(id);
         if (!deleted) {
