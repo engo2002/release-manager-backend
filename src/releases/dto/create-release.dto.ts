@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ReleaseFieldDto } from "./release-field.dto";
+import {ApiProperty} from "@nestjs/swagger";
+import {ReleaseFieldDto} from "./release-field.dto";
 
 export class CreateReleaseDto {
     @ApiProperty()

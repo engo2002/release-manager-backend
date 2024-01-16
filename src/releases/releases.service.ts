@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Release } from './entity/release.entity';
-import { ReleaseField } from './entity/release-field.entity';
-import { ReleaseFieldDto } from './dto/release-field.dto';
-import { CreateReleaseDto } from './dto/create-release.dto';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
+import {Release} from './entity/release.entity';
+import {ReleaseField} from './entity/release-field.entity';
+import {ReleaseFieldDto} from './dto/release-field.dto';
+import {CreateReleaseDto} from './dto/create-release.dto';
+
 @Injectable()
 export class ReleaseService {
     constructor(

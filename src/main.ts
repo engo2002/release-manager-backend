@@ -1,12 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import {NestFactory} from '@nestjs/core';
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {AppModule} from './app.module';
 import {HttpException, HttpStatus, ValidationPipe} from "@nestjs/common";
 import {ExpressAdapter} from "@nestjs/platform-express";
 import * as bodyParser from "body-parser";
 import Helmet from "helmet";
-import { createDatabase } from "typeorm-extension";
-import { getConfig } from './data-source';
+import {createDatabase} from "typeorm-extension";
+import {getConfig} from './data-source';
 import * as express from 'express';
 
 (async () => {

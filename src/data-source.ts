@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import { DataSourceOptions } from "typeorm";
+import {DataSourceOptions} from "typeorm";
 
 dotenv.config({
     path: !!process.env.NODE_ENV ? "local.env" : __dirname + "/.env",

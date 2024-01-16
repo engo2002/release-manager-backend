@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Release } from "src/releases/entity/release.entity";
+import {ApiProperty} from "@nestjs/swagger";
+import {Release} from "src/releases/entity/release.entity";
 import {Column, Entity, OneToMany} from "typeorm";
 
 @Entity()
@@ -25,7 +25,7 @@ export class Project {
     @ApiProperty()
     link: string;
 
-    @OneToMany(() => Release, release => release.project)
+    @OneToMany(() => Release, (release) => release.projectId)
     @ApiProperty({ isArray: true, type: () => Release })
     releases: Release[];
 

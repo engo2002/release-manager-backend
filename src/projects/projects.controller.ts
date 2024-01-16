@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
-import { ProjectsService } from './projects.service';
-import { Project } from './entity/project.entity';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from '@nestjs/common';
+import {ProjectsService} from './projects.service';
+import {Project} from './entity/project.entity';
 import {ApiResponse, ApiTags} from '@nestjs/swagger';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import {CreateProjectDto} from './dto/create-project.dto';
+import {UpdateProjectDto} from './dto/update-project.dto';
 
 @ApiTags('projects') // Optional: Definiert Tags für Swagger
 @Controller('projects')

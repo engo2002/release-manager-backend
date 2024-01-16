@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { ReleaseField } from './release-field.entity';
-import { ApiProperty } from '@nestjs/swagger';
-import { Project } from 'src/projects/entity/project.entity';
+import {Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {ReleaseField} from './release-field.entity';
+import {ApiProperty} from '@nestjs/swagger';
+import {Project} from 'src/projects/entity/project.entity';
 
 @Entity()
 export class Release {
@@ -14,8 +14,9 @@ export class Release {
     releaseNumber: string;
 
     @ApiProperty({ type: () => Project })
-    @OneToOne(() => Project, project => project.releases)
-    project: Project;
+    @ManyToOne(() => Project, project => project.releases)
+    @Column({ type: 'varchar', name: 'projectId', nullable: false })
+    projectId: Project;
 
     @OneToOne(() => ReleaseField, { cascade: true })
     @ApiProperty()

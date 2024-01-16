@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
-import { Release } from './entity/release.entity';
-import { ReleaseField } from './entity/release-field.entity';
-import { CreateReleaseDto } from './dto/create-release.dto';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from '@nestjs/common';
+import {Release} from './entity/release.entity';
+import {ReleaseField} from './entity/release-field.entity';
+import {CreateReleaseDto} from './dto/create-release.dto';
 import {ApiResponse, ApiTags} from '@nestjs/swagger';
-import { ReleaseService } from './releases.service';
-import {Project} from "../projects/entity/project.entity";
+import {ReleaseService} from './releases.service';
 
 @ApiTags('releases')
 @Controller('releases')

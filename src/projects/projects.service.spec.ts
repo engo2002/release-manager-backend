@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Project } from './entity/project.entity';
-import { ProjectService } from './projects.service';
+import {Test, TestingModule} from '@nestjs/testing';
+import {getRepositoryToken} from '@nestjs/typeorm';
+import {Project} from './entity/project.entity';
+import {ProjectService} from './projects.service';
 
 const mockProjects: Project[] = [
   {

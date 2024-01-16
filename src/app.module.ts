@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ProjectsModule } from './projects/projects.module';
-import { ReleasesModule } from './releases/releases.module';
+import {Module} from '@nestjs/common';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
+import {ProjectsModule} from './projects/projects.module';
+import {ReleasesModule} from './releases/releases.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ThrottlerModule} from "@nestjs/throttler";
 import {ConfigModule} from "@nestjs/config";
