@@ -1,9 +1,12 @@
 import {ApiProperty} from "@nestjs/swagger";
 import {ReleaseFieldDto} from "./release-field.dto";
 
-export class CreateReleaseDto {
+export class CreateEditReleaseDto {
     @ApiProperty()
     releaseNumber: string;
+
+    @ApiProperty({ maxLength: 200 })
+    headline: string;
 
     @ApiProperty({ type: ReleaseFieldDto })
     majorField: Partial<ReleaseFieldDto>;

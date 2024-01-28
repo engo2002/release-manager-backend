@@ -1,10 +1,10 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {HttpException, Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from 'typeorm';
 import {Release} from './entity/release.entity';
 import {ReleaseField} from './entity/release-field.entity';
 import {ReleaseFieldDto} from './dto/release-field.dto';
-import {CreateReleaseDto} from './dto/create-release.dto';
+import {CreateEditReleaseDto} from './dto/create-edit-release.dto';
 
 @Injectable()
 export class ReleaseService {
@@ -16,11 +16,21 @@ export class ReleaseService {
     ) {}
 
     async findAllReleases(): Promise<Release[]> {
-        return await this.releaseRepository.find();
+        return await this.releaseRepository.find({relations: ["fields"]});
+    }
+
+    async getReleaseForProject(projectId: string) {
+        return await this.releaseRepository.find({
+            where: {
+                projectId: projectId
+            }
+        })
     }
 
     async findReleaseById(id: string): Promise<Release> {
-        const release = await this.releaseRepository.findOneBy({ id: id });
+        const release = await this.releaseRepository.findOne({ where: {
+            id: id
+            }, relations: ["fields"] });
         if (!release) {
             throw new NotFoundException(`Release with ID ${id} not found`);
         }
@@ -32,13 +42,26 @@ export class ReleaseService {
         return await this.releaseRepository.save(newRelease);
     }
 
-    async updateRelease(id: string, releaseData: Partial<Release>): Promise<Release> {
-        await this.releaseRepository.update(id, releaseData);
-        const updatedRelease = await this.findReleaseById(id);
-        if (!updatedRelease) {
-            throw new NotFoundException(`Release with ID ${id} not found`);
-        }
-        return updatedRelease;
+    async updateRelease(id: string, releaseData: CreateEditReleaseDto): Promise<Release> {
+        const release = await this.releaseRepository.save({
+            id: id,
+            releaseNumber: releaseData.releaseNumber,
+            headline: releaseData.headline
+        });
+        await this.deleteReleaseFieldsForRelease(release.id);
+        await Promise.all([
+            this.createFieldForRelease(release, 'majorField', releaseData.majorField),
+            this.createFieldForRelease(release, 'minorField', releaseData.minorField),
+            this.createFieldForRelease(release, 'bugfixField', releaseData.bugfixField),
+            this.createFieldForRelease(release, 'otherField', releaseData.otherField),
+        ]);
+
+        return await this.findReleaseById(id);
+    }
+
+    async deleteReleaseFieldsForRelease(releaseId: string) {
+        return await this.releaseFieldRepository.delete({ releaseId: releaseId });
+
     }
 
     async deleteRelease(id: string): Promise<boolean> {
@@ -81,18 +104,20 @@ export class ReleaseService {
         return release;
     }
 
-    async createReleaseWithFields(createReleaseDto: CreateReleaseDto): Promise<Release> {
-        const { releaseNumber, majorField, minorField, bugfixField, otherField } = createReleaseDto;
-
-        const release = this.releaseRepository.create({ releaseNumber });
+    async createReleaseWithFields(createReleaseDto: CreateEditReleaseDto, projectId: string): Promise<Release> {
+        const release = this.releaseRepository.create({
+            releaseNumber: createReleaseDto.releaseNumber,
+            headline: createReleaseDto.headline,
+            projectId: projectId
+        });
 
         const createdRelease = await this.releaseRepository.save(release);
 
         await Promise.all([
-            this.createFieldForRelease(createdRelease, 'majorField', majorField),
-            this.createFieldForRelease(createdRelease, 'minorField', minorField),
-            this.createFieldForRelease(createdRelease, 'bugfixField', bugfixField),
-            this.createFieldForRelease(createdRelease, 'otherField', otherField),
+            this.createFieldForRelease(createdRelease, 'majorField', createReleaseDto.majorField),
+            this.createFieldForRelease(createdRelease, 'minorField', createReleaseDto.minorField),
+            this.createFieldForRelease(createdRelease, 'bugfixField', createReleaseDto.bugfixField),
+            this.createFieldForRelease(createdRelease, 'otherField', createReleaseDto.otherField),
         ]);
 
         return createdRelease;
@@ -103,19 +128,17 @@ export class ReleaseService {
         fieldKey: string,
         fieldData: Partial<ReleaseFieldDto>,
     ): Promise<void> {
-        if (fieldData) {
+        if (fieldData && !!fieldData.content) {
             const existingField = release[fieldKey];
 
             if (existingField) {
                 await this.releaseFieldRepository.update(existingField.id, fieldData);
             } else {
                 const newField = this.releaseFieldRepository.create(fieldData);
-                newField.showInWhatsNew = fieldData.showInWhatsNew?? true; // Default value for showInWhatsNew
+                newField.releaseId = release.id;
+                newField.fieldType = fieldKey;
 
                 await this.releaseFieldRepository.save(newField);
-
-                release[fieldKey] = newField;
-                await this.releaseRepository.save(release);
             }
         }
     }

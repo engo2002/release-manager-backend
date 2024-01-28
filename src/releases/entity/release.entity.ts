@@ -1,7 +1,8 @@
-import {Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {ReleaseField} from './release-field.entity';
 import {ApiProperty} from '@nestjs/swagger';
 import {Project} from 'src/projects/entity/project.entity';
+import {IsString, Length} from "class-validator";
 
 @Entity()
 export class Release {
@@ -16,7 +17,12 @@ export class Release {
     @ApiProperty({ type: () => Project })
     @ManyToOne(() => Project, project => project.releases)
     @Column({ type: 'varchar', name: 'projectId', nullable: false })
-    projectId: Project;
+    projectId: string;
+
+    @Column({ type: 'varchar', length: 200, nullable: false })
+    @ApiProperty()
+    @Length(1,200)
+    headline: string;
 
     @OneToOne(() => ReleaseField, { cascade: true })
     @ApiProperty()
@@ -37,4 +43,8 @@ export class Release {
     @Column({ type: 'varchar', nullable: true })
     @ApiProperty()
     image: string; // Or any other suitable data type for image storage
+
+    @OneToMany(() => ReleaseField, (releaseField) => releaseField.releaseId)
+    @ApiProperty({ isArray: true, type: () => ReleaseField })
+    fields: ReleaseField[];
 }
