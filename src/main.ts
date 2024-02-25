@@ -8,6 +8,8 @@ import Helmet from "helmet";
 import {createDatabase} from "typeorm-extension";
 import {getConfig} from './data-source';
 import * as express from 'express';
+import http from "http";
+import _ from "lodash";
 
 (async () => {
   await createDatabase({ ifNotExist: true, options: getConfig() });
@@ -59,7 +61,12 @@ async function bootstrap() {
   );
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+    if (_.isEmpty(process.env.HTTPPORT)) {
+        process.env.HTTPPORT = "80";
+    }
 
-  await app.listen(3000);
+    http.createServer(server).listen(process.env.HTTPPORT);
+
+    await app.init();
 }
 bootstrap();
