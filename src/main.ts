@@ -8,8 +8,8 @@ import Helmet from "helmet";
 import {createDatabase} from "typeorm-extension";
 import {getConfig} from './data-source';
 import * as express from 'express';
-import http from "http";
-import _ from "lodash";
+import * as http from "http";
+import * as _ from "lodash";
 
 (async () => {
   await createDatabase({ ifNotExist: true, options: getConfig() });
