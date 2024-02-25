@@ -34,6 +34,14 @@ export class ReleaseController {
         return await this.releaseService.getReleaseForProject(projectId);
     }
 
+    @Get('project/:projectId/release/:releaseNumber')
+    @ApiParam({ name: "projectId", description: "projectId"})
+    @ApiParam({ name: "releaseNumber", description: "Release Number"})
+    @ApiResponse({ type: Release})
+    async findReleaseByProjectIdAndReleaseNumber(@Param('projectId') projectId: string, @Param('releaseNumber') releaseNumber: string): Promise<Release> {
+        return await this.releaseService.findReleaseByProjectIdAndReleaseNumber(projectId, releaseNumber);
+    }
+
     @Post("project/:projectId/release")
     @ApiResponse({ type: Release })
     @ApiParam({ name: "projectId", description: "projectId"})

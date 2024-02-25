@@ -37,6 +37,17 @@ export class ReleaseService {
         return release;
     }
 
+    async findReleaseByProjectIdAndReleaseNumber(projectId: string, releaseNumber: string): Promise<Release> {
+        const release = await this.releaseRepository.findOne({ where: {
+                releaseNumber: releaseNumber,
+                projectId: projectId
+            }, relations: ["fields"] });
+        if (!release) {
+            throw new NotFoundException(`Release with release number ${releaseNumber} in project ${projectId} not found`);
+        }
+        return release;
+    }
+
     async createRelease(releaseData: Partial<Release>): Promise<Release> {
         const newRelease = this.releaseRepository.create(releaseData);
         return await this.releaseRepository.save(newRelease);
