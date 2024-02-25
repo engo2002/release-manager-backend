@@ -6,7 +6,7 @@ COPY package.json ./
 RUN yarn install
 
 COPY . .
-RUN yarn run build:prod
+RUN yarn run build
 ADD . /usr/src/app
 EXPOSE 80
 EXPOSE 443
