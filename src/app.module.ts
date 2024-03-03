@@ -6,6 +6,12 @@ import {ReleasesModule} from './releases/releases.module';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ThrottlerModule} from "@nestjs/throttler";
 import {ConfigModule} from "@nestjs/config";
+import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { UserSessionRefreshModule } from './user-session-refresh/user-session-refresh.module';
+import { AuthModule } from './auth/auth.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { SharedModule } from './shared/shared.module';
 
 const ENV = process.env.NODE_ENV;
 @Module({
@@ -33,7 +39,13 @@ const ENV = process.env.NODE_ENV;
           ssl: {
               rejectUnauthorized: false,
           },
-      }),],
+      }),
+      UsersModule,
+      RolesModule,
+      UserSessionRefreshModule,
+      AuthModule,
+      PermissionsModule,
+      SharedModule,],
   controllers: [AppController],
   providers: [AppService],
 })
