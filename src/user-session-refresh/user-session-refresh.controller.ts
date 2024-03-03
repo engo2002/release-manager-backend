@@ -1,9 +1,10 @@
 import { Controller, Delete, Get, Param, Query, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import {ApiBearerAuth, ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 import { Permissions } from "../auth/permissions.decorator";
 import { PermissionsGuard } from "../auth/permissions.guard";
 import { UserSessionRefreshService } from "./user-session-refresh.service";
+import {UserSessionDto} from "./dto/UserSessionDto";
 
 @Controller("sessions")
 export class UserSessionRefreshController {
@@ -19,6 +20,7 @@ export class UserSessionRefreshController {
         required: true,
         type: "string",
     })
+    @ApiResponse({ type: UserSessionDto, isArray: true })
     async getActiveSessions(@Param() params) {
         return await this.userSessionRefresh.getActiveSessionsByUserId(params.userId);
     }

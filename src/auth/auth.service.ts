@@ -18,7 +18,7 @@ import * as _ from "lodash";
 import * as bcrypt from "bcrypt";
 import {JwtPayload} from "./interfaces/jwtPayload.interface";
 import {UserSessionDto} from "../user-session-refresh/dto/UserSessionDto";
-import UAParser from "ua-parser-js";
+import * as UAParser from "ua-parser-js";
 @Injectable()
 export class AuthService {
     private readonly logger = new Logger(AuthService.name);

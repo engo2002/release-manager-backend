@@ -12,7 +12,7 @@ import {isEmail} from "class-validator";
 import * as bcrypt from "bcrypt";
 import {CreateUserDto} from "./dto/createUser.dto";
 import {createRolesDto} from "../roles/dto/createRolesDto.dto";
-import _ from "lodash";
+import * as _ from "lodash";
 import {RolesEntity} from "../roles/entity/roles.entity";
 
 @Injectable()
