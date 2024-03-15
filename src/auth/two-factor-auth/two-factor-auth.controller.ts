@@ -6,9 +6,9 @@ import { Permissions } from "../permissions.decorator";
 import { PermissionsGuard } from "../permissions.guard";
 import { TwoFactorDto } from "./dto/twoFactor.dto";
 import { TwoFactorCreateDto } from "./dto/twoFactorCreate.dto";
-import { TwoFactorDeleteDto } from "./dto/twoFactorDelete.dto";
 import { TwoFactorLoginDto } from "./dto/twoFactorLogin.dto";
 import { TwoFactorAuthService } from "./two-factor-auth.service";
+import { TwoFactorDeleteDto } from "./dto/twoFactorDelete.dto";
 
 @Controller("2fa")
 @ApiTags("Two Factor Authentication")
@@ -58,7 +58,6 @@ export class TwoFactorAuthController {
     @UseGuards(AuthGuard(), PermissionsGuard)
     @Permissions("canWriteUsers")
     @ApiBearerAuth("JWT-auth")
-    @ApiBody({ type: TwoFactorDeleteDto })
     @Post("reset/:userId")
     @ApiParam({ name: "userId", required: true, type: "string" })
     public async reset2Fa(@Param("userId") userId: string) {

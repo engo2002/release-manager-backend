@@ -157,4 +157,12 @@ export class AuthController {
         const refreshToken = await this.cacheManager.get<string>("bearer");
         return this.authService.logout(refreshToken);
     }
+
+    @UseGuards(AuthGuard())
+    @ApiBearerAuth("JWT-auth")
+    @Delete("deleteuser/:id")
+    @ApiParam({ name: "id", required: true, type: "string" })
+    public async deleteUser(@Param() params) {
+        return await this.authService.deleteUser(params.id);
+    }
 }
